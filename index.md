@@ -77,7 +77,7 @@ Here is the screenshot of the query run `http://localhost:4000/add-message?s=Hel
 ### Part Two:
 In this section of the lab, we will go over the process of using the `ls` command line when accessing our server from our computer
 
-# Private Key
+#### Private Key
 ```
 C:\Users\chara\.ssh>dir
  Volume in drive C is OS
@@ -97,7 +97,7 @@ C:\Users\chara\.ssh>dir
 > This cannot be accessed from the server.  Only the public key is sent to the server to complete our authentication, but the private key stays with the computer.  There for here is the private key.  The private key is the id_rsa.
 
 
-# Public Key Location
+#### Public Key Location
 ``` bash
 [srbattula@ieng6-203]:~:64$ cd .ssh/
 [srbattula@ieng6-203]:.ssh:65$ ls
@@ -106,7 +106,7 @@ authorized_keys
 
 > Public key is stored in the authorized_keys as shown with `ls`.  The public key works as it can be stored in the server and is used to authenticate the connection by comparing the private key on my computer.
 
-# Terminal Interaction Without Password
+#### Terminal Interaction Without Password
 ```bash
 C:\Users\chara\OneDrive\Desktop\CSE 15L\Lab Report 2>ssh srbattula@ieng6.ucsd.edu
 Last login: Mon Jan 29 20:03:14 2024 from 128.54.150.240
