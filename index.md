@@ -76,7 +76,22 @@ Here is the screenshot of the query run `http://localhost:4000/add-message?s=Hel
 In this section of the lab, we will go over the process of using the `ls` command line when accessing our server from our computer
 
 - Private Key
-> This cannot be accessed from the server.  Only the public key is sent to the server to complete our authentication, but the private key stays with the computer.
+```
+C:\Users\chara\.ssh>dir
+ Volume in drive C is OS
+ Volume Serial Number is 4C4E-A1B9
+
+ Directory of C:\Users\chara\.ssh
+
+01/25/2024  02:34 PM    <DIR>          .
+01/28/2024  04:25 AM    <DIR>          ..
+01/25/2024  02:34 PM             2,610 id_rsa
+01/25/2024  02:34 PM               576 id_rsa.pub
+01/25/2024  02:14 PM               225 known_hosts
+               3 File(s)          3,411 bytes
+               2 Dir(s)  288,206,143,488 bytes free
+```
+> This cannot be accessed from the server.  Only the public key is sent to the server to complete our authentication, but the private key stays with the computer.  There for here is the private key.  The private key is the id_rsa.
 - Public Key Location
 ``` bash
 [srbattula@ieng6-203]:~:64$ cd .ssh/
@@ -109,3 +124,6 @@ or "prep -h" for more options.
 [srbattula@ieng6-203]:~:67$ 
 ```
 > This shows how without even using a password step, I can log into the server without such authetification.
+---
+### Part 3:
+During the labs from week 2 and week 3, I learned how to use `ssh`.  This was a command that I had heard of before but never used to connect to a server.  I found the most interesting part to be adding the public key to the server as I never knew computers had such a system to connect server to server.
