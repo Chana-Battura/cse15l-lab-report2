@@ -3,104 +3,71 @@
 
 ---
 
-This lab report will describe the use cases of three commands often used in the UNIX terminal.  These commands are `cd`, `ls`, and `cat` and are used to navigate and display the various files found in a file system. 
-
+This lab report will describe the creation process of ChatServer.  With this website, the queries are added to the chat log as messages and the following sections will describe this process. 
 ---
-## `cd` command
-> The `cd` command is used to navigate the various directories that can be found in a basic file system.  Below, three examples of `cd` will be displayed, alongside the output with a description of it.
+## The Code:
+Here is the code that runs all of the Chat Server:
+```java
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
 
-#### `cd` command without any arguments
-```
-[user@sahara ~/lecture1/messages]$ cd
-[user@sahara ~]$ 
-```
-- When the command was run, the working directory was `~/lecture1/messages` and after the command was run, the working directory became`~/`
-- When this command is run without any arguments, the command moves the working directory to the home directory.  There will be no arguments as there is always a home directory and this command will always reach it.
-- The output is not an error as shown above, the command was able to take the working directory to the home directory.
+class Handler implements URLHandler {
+    // The one bit of state on the server: a number that will be manipulated by
+    // various requests.
 
-#### `cd` command with the path to a directory
-```
-[user@sahara ~]$ cd lecture1/messages/
-[user@sahara ~/lecture1/messages]$ 
-```
-- When the command was run, the working directory was `~/`, and after the command was run, the working directory became`~/lecture1/messages`
-- When this command is run with the path to a directory, the command moves the working directory to the described directory.  This would only work if that directory is inside the working directory and having no errors means that it was able to reach the directory itself as it is in the working directory.
-- The output is not an error as shown above, the command was able to take the working directory to the specified directory, meaning that the directory given is found within the working directory.
+    ArrayList<String> vals = new ArrayList<String>();
 
-#### `cd` command with the path to a file
-```
-[user@sahara ~]$ cd lecture1/messages/en-us.txt 
-bash: cd: lecture1/messages/en-us.txt: Not a directory
-```
-- When the command was run, the working directory was `~/`, and after the command was run, the working directory stayed as `~/` due to an error
-- When this command is run with the path to a file, the terminal throws an error as the command `cd` can only navigate within directories.
-- The output is an error as the terminal through the error `Not a directory`. `cd` is a command that navigates only within directories and cannot access files.
+    public String handleRequest(URI url) {
+        if (url.getPath().equals("/")) {
+            return String.format("Welcome to Charan's Chat Server");
+        } else {
+            if (url.getPath().contains("/add-message")) {
+                String[] queries = url.getQuery().split("&");
+                String[] messageParams = queries[0].split("=");
+                String[] userParams = queries[1].split("=");
+                if (userParams[0].equals("user") && messageParams[0].equals("s")) {
+                    vals.add(String.format("%s: %s", userParams[1], messageParams[1]));
+                }
+                String message = "";
+                for (String i: vals){
+                    message += i + "\n";
+                }
+                return String.format(message);
+            }
+            return "404 Not Found!";
+        }
+    }
+}
 
+class ChatServer {
+    public static void main(String[] args) throws IOException {
+        if(args.length == 0){
+            System.out.println("Missing port number! Try any number between 1024 to 49151");
+            return;
+        }
+
+        int port = Integer.parseInt(args[0]);
+
+        Server.start(port, new Handler());
+    }
+}
+
+```
 ---
+## `/add-message` query
+> The `/add-message` query works with two parts. The basic template for the query that can be run is `?s=MESSAGE&user=USERNAME` where the message and username can be switched with this.
 
-## `ls` command
-> The `ls` command lists out the directories and files in the working directory.  Below, three examples of `cd` will be displayed, alongside the output with a description of it.
+#### Example One
+Here is the screenshot of the query run `http://localhost:4000/add-message?s=Hello&user=jpolitz`
+> ![image](https://github.com/Chana-Battura/cse15l-lab-report2/assets/39713790/0a2674cd-76f1-41e2-b496-c8e2b7adefed)
+- When this query is run, the `handleRequest(URI url)` method is run, specifically the section when path contains `/add-message`.
+- The relevant argument to this method is the URL.  This method call adds the message from the URI object to the field `ArrayList<String> vals`
+- When this method is called, the `ArrayList<String> vals` gets updated to the values of the message.  The values that are passed are the message and the username.  The message is `Hello` and the username is `jpolitz`.  
 
-#### `ls` command without any arguments
-```
-[user@sahara ~/lecture1]$ ls
-Hello.class  Hello.java messages README
-```
-- When the command was run, the working directory was `~/lecture1` and after the command was run, the working directory stayed `~/lecture1` but listed out the directories and files in the directory.
-- When this command is run without any arguments, the command lists out all of the directories and files in the directory itself.  The directories found in the working directory are listed as bold while the files are listed regularly 
-- The output is not an error as shown above, the command was able to list all the files and directories found in the working directory.
-- *It is important to note that **`messages`** was bold in the terminal and for formatting reasons couldn't be bold in the code block above.*
-
-#### `ls` command with the path to a directory
-```
-[user@sahara ~]$ ls lecture1/
-Hello.class  Hello.java  messages  README
-```
-- When the command was run, the working directory was `~/`, and after the command was run, the working directory stayed `~/` but listed out the directories and files in the directory specified.
-- When this command is run with the path to a directory, the command lists all the files and directories in the specified directory.  The directories found in the working directory are listed as bold while the files are listed regularly
-- The output is not an error as shown above, the command was able to list all the files and directories found in `lecture1\`.
-- *It is important to note that **`messages`** was bold in the terminal and for formatting reasons couldn't be bold in the code block above.*
-
-#### `ls` command with the path to a file
-```
-[user@sahara ~]$ ls lecture1/messages/en-us.txt 
-lecture1/messages/en-us.txt
-```
-- When the command was run, the working directory was `~/`, and after the command was run, the working directory stayed as `~/` and instead listed the path to the file itself.
-- When this command is run with the path to a file, the command `ls`, does not have a directory to list out files and directories simply list out the path of the file specified.
-- The output is not an error as shown above, the command was able to list the path of the file itself
-
----
-
-## `cat` command
-> The `cat` command lists the contents of the files that are specified with this command.  Below, three examples of `cat` will be displayed, alongside the output with a description of it.
-
-#### `cat` command without any arguments
-```
-[user@sahara ~/lecture1]$ cat
-
-^C
-[user@sahara ~/lecture1]$ 
-```
-- When the command was run, the working directory was `~/lecture1` and after the command was run, the working directory stayed `~/lecture1` but simply waited for an input.
-- When this command is run without any arguments, the command does not do anything.  Rather, it waits for the user to enter a path and thus has to be terminated
-- The output is not an error as shown above, the command simply is still waiting for a parameter.  However, the command will not do anything so it serves no function.
-
-#### `cat` command with the path to a directory
-```
-[user@sahara ~/lecture1]$ cat \messages
-cat: messages: Is a directory
-```
-- When the command was run, the working directory was `~/lecture`, and after the command was run, the working directory stayed `~/lecture` but threw out an error.
-- When this command is run with the path to a directory, the terminal throws an error as the command `cat` can only list out the contents within files.
-- The output is an error as the terminal through the error `Is a directory`. `cat` is a command that lists only the content within files and cannot access directories.
-
-
-#### `cat` command with the path to a file
-```
-[user@sahara ~/lecture1/messages]$ cat en-us.txt 
-Hello World!
-```
-- When the command was run, the working directory was `~/lecture1/messages`, and after the command was run, the working directory stayed as `~/lecture1/messages` and instead listed the contents of the file itself.
-- When this command is run with the path to a file, the command `cat`, simply lists out the contents of the file specified.
-- The output is not an error as shown above, the command was able to list the contents of the file itself
+#### Example Two
+Here is the screenshot of the query run `http://localhost:4000/add-message?s=Hello&user=jpolitz`
+> ![image](https://github.com/Chana-Battura/cse15l-lab-report2/assets/39713790/d4d72123-2a83-42ff-9b43-5aba2b360ba6)
+- When this query is run, the `handleRequest(URI url)` method is run, specifically the section when path contains `/add-message`.
+- The relevant argument to this method is the URL.  This method call adds the message from the URI object to the field `ArrayList<String> vals`
+- When this method is called, the `ArrayList<String> vals` gets updated to the values of the message.  The values that are passed are the message and the username.  The message is `Hello` and the username is `jpolitz`.  
