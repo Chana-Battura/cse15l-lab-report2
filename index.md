@@ -71,6 +71,8 @@ Here is the screenshot of the query run `http://localhost:4000/add-message?s=Hel
 - When this query is run, the `handleRequest(URI url)` method is run, specifically the section when path contains `/add-message`.
 - The relevant argument to this method is the URL.  This method call adds the message from the URI object to the field `ArrayList<String> vals`
 - When this method is called, the `ArrayList<String> vals` gets updated to the values of the message of `CharanB: Good Morning!`.  The values that are passed are the message and the username.  The message is stored in the variable `String userParams[1]` and the username is in the variable `String userParams[0]`.
+
+  
 ---
 ### Part Two:
 In this section of the lab, we will go over the process of using the `ls` command line when accessing our server from our computer
@@ -91,7 +93,10 @@ C:\Users\chara\.ssh>dir
                3 File(s)          3,411 bytes
                2 Dir(s)  288,206,143,488 bytes free
 ```
+
+
 > This cannot be accessed from the server.  Only the public key is sent to the server to complete our authentication, but the private key stays with the computer.  There for here is the private key.  The private key is the id_rsa.
+
 - Public Key Location
 ``` bash
 [srbattula@ieng6-203]:~:64$ cd .ssh/
@@ -99,6 +104,7 @@ C:\Users\chara\.ssh>dir
 authorized_keys
 ```
 > Public key is stored in the authorized_keys as shown with `ls`.  The public key works as it can be stored in the server and is used to authenticate the connection by comparing the private key on my computer.
+
 - Terminal Interaction Without Password
 ```bash
 C:\Users\chara\OneDrive\Desktop\CSE 15L\Lab Report 2>ssh srbattula@ieng6.ucsd.edu
@@ -124,6 +130,7 @@ or "prep -h" for more options.
 [srbattula@ieng6-203]:~:67$ 
 ```
 > This shows how without even using a password step, I can log into the server without such authetification.
+
 ---
 ### Part 3:
 During the labs from week 2 and week 3, I learned how to use `ssh`.  This was a command that I had heard of before but never used to connect to a server.  I found the most interesting part to be adding the public key to the server as I never knew computers had such a system to connect server to server.
